@@ -28,11 +28,21 @@ class PhoneInputError(InputError):
         return "PhoneInputError: 'phone' command expects one argument 'name'."
 
 
+class InaccurateBirthdayFormat(InputError):
+    def __str__(self):
+        return "Birthday must be in format DD.MM.YYYY."
+
+
+class InaccuratePhoneFormat(InputError):
+    def __str__(self):
+        return "Phone number must contain exactly 10 digits."
+
+
 def input_error(func):
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except InputError as e:
-            return str(e)
+            print(f"{str(e)}")
 
     return inner
