@@ -3,7 +3,9 @@
 from typing import Optional
 
 from address_book import AddressBook, Record
-from errors import AddInputError, ChangeInputError, PhoneInputError, input_error
+from errors import (
+    AddContactInputError, ChangeInputError, PhoneInputError, AddBirthdatInputError, input_error
+)
 
 Contacts = dict[str, str]
 CommandArguments = list[str]
@@ -13,7 +15,7 @@ def parse_input(user_input: str) -> tuple[str, Optional[CommandArguments]]:
     if not user_input.strip():
         return "", None
 
-    cmd, *args = user_input.split()
+    cmd, *args = user_input.split(' ')
     cmd = cmd.strip().lower()
 
     if len(args) == 0:
@@ -25,7 +27,7 @@ def parse_input(user_input: str) -> tuple[str, Optional[CommandArguments]]:
 @input_error
 def add_contact(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:
-        raise AddInputError()
+        raise AddContactInputError()
 
     name, phone = args
     new_contact = Record(name)
@@ -59,6 +61,20 @@ def print_phone(args: CommandArguments, contacts: AddressBook) -> str:
         return f"No contact named {name} exists."
 
     return str(contact)
+
+
+@input_error
+def add_birthday(args: CommandArguments, contacts: AddressBook) -> str:
+    if args is None or len(args) < 2:
+        raise AddBirthdatInputError()
+
+    name, date = args
+    contact = contacts.find(name)
+    if not contact:
+        return f"No contact named {name} exists."
+
+    contact.add_birthday(date)
+    return f"Birthday added for {name} updated."
 
 
 def print_all(contacts: AddressBook) -> str:

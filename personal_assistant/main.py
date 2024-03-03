@@ -1,16 +1,10 @@
 """Prototype of CLI assistant"""
 
 from address_book import AddressBook
-from assistant_functions import add_contact, change_contact, parse_input, print_all, print_phone
+from assistant_functions import add_contact, change_contact, parse_input, print_all, print_phone, add_birthday
 from errors import HELP_ERROR_MESSAGE
 
 # TODO:
-# add [ім'я] [телефон]: Додати новий контакт з іменем та телефонним номером.
-# change [ім'я] [новий телефон]: Змінити телефонний номер для вказаного контакту.
-# phone [ім'я]: Показати телефонний номер для вказаного контакту.
-# all: Показати всі контакти в адресній книзі.
-
-# add-birthday [ім'я] [дата народження]: Додати дату народження для вказаного контакту.
 # show-birthday [ім'я]: Показати дату народження для вказаного контакту.
 # birthdays: Показати дні народження, які відбудуться протягом наступного тижня.
 
@@ -30,6 +24,8 @@ def main():
             print("How can I help you?")
         elif command == "add":
             print(add_contact(args, contacts))
+        elif command == "add-birthday":
+            print(add_birthday(args, contacts))
         elif command == "change":
             print(change_contact(args, contacts))
         elif command == "phone":
