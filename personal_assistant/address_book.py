@@ -1,11 +1,9 @@
 import re
-from collections import UserDict
-from typing import List, Optional
-from errors import InaccurateBirthdayFormat, InaccuratePhoneFormat, input_error
-
-from collections import defaultdict
+from collections import UserDict, defaultdict
 from datetime import date, datetime, timedelta
+from typing import List, Optional
 
+from errors import InaccurateBirthdayFormat, InaccuratePhoneFormat, input_error
 
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Next Monday"]
 MONDAY_INDEX = 0
@@ -27,7 +25,7 @@ class Name(Field):
 class Phone(Field):
     def __init__(self, value: str):
         if not re.match(r"^\d{10}$", value):
-            raise InaccuratePhoneFormat()       
+            raise InaccuratePhoneFormat()
         super().__init__(value)
 
 
@@ -36,9 +34,9 @@ class Birthday(Field):
         if not re.match(r"^\d{2}\.\d{2}\.\d{4}$", value):
             raise InaccurateBirthdayFormat()
         super().__init__(value)
-  
+
     def get_birthday_datetime(self) -> date:
-        return datetime.strptime(self.value, '%d.%m.%Y').date()
+        return datetime.strptime(self.value, "%d.%m.%Y").date()
 
 
 class Record:
@@ -47,11 +45,9 @@ class Record:
         self.phones: List[Phone] = []
         self.birthday: Optional[Birthday] = None
 
-    @input_error
     def add_birthday(self, birthday: str) -> None:
         self.birthday = Birthday(birthday)
 
-    @input_error
     def add_phone(self, phone: str) -> None:
         new_phone = Phone(phone)
         if new_phone:
@@ -61,9 +57,10 @@ class Record:
         self.phones = [p for p in self.phones if p.value != phone]
 
     def edit_phone(self, old_phone: str, new_phone: str) -> None:
-        for p in self.phones:
+        for index, p in enumerate(self.phones):
             if p.value == old_phone:
-                p.value = new_phone
+                self.phones[index] = Phone(new_phone)
+                break
 
     def find_phone(self, phone: str) -> Optional[str]:
         for p in self.phones:
@@ -126,7 +123,7 @@ class AddressBook(UserDict):
             greeting_string += "\nNo birthdays this week :("
 
         return greeting_string
-    
+
     @staticmethod
     def _get_birthday_this_year(birthday: date, relative_date: date) -> date:
         """
@@ -145,7 +142,7 @@ class AddressBook(UserDict):
             birthday_this_year = birthday_this_year.replace(year=relative_date.year + 1)
 
         return birthday_this_year
-    
+
     @staticmethod
     def _get_greeting_day(birthday_this_year: date, relative_date: date) -> str:
         """
@@ -177,11 +174,11 @@ if __name__ == "__main__":
     john_record.add_phone("1234567890")
     john_record.add_phone("123456")
     john_record.add_phone("5555555555")
-    
+
     # add birthday with wrong format
-    john_record.add_birthday((datetime.today() + timedelta(1)).date().strftime('%Y-%d-%m'))
+    john_record.add_birthday((datetime.today() + timedelta(1)).date().strftime("%Y-%d-%m"))
     # add birthday with correct format
-    john_record.add_birthday((datetime.today() + timedelta(1)).date().strftime('%d.%m.%Y'))
+    john_record.add_birthday((datetime.today() + timedelta(1)).date().strftime("%d.%m.%Y"))
 
     # Додавання запису John до адресної книги
     book.add_record(john_record)
@@ -190,7 +187,7 @@ if __name__ == "__main__":
     jane_record = Record("Jane")
     jane_record.add_phone("9876543210")
     jane_record.add_phone("98765432")
-    jane_record.add_birthday((datetime.today() + timedelta(5)).date().strftime('%d.%m.%Y'))
+    jane_record.add_birthday((datetime.today() + timedelta(5)).date().strftime("%d.%m.%Y"))
     book.add_record(jane_record)
 
     # Виведення всіх записів у книзі

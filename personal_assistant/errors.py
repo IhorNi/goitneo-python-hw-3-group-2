@@ -43,6 +43,6 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except InputError as e:
-            print(f"{str(e)}")
+            return str(e)
 
     return inner

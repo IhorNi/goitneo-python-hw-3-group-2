@@ -2,6 +2,7 @@
 
 from typing import Optional
 
+from address_book import AddressBook, Record
 from errors import AddInputError, ChangeInputError, PhoneInputError, input_error
 
 Contacts = dict[str, str]
@@ -22,42 +23,46 @@ def parse_input(user_input: str) -> tuple[str, Optional[CommandArguments]]:
 
 
 @input_error
-def add_contact(args: CommandArguments, contacts: Contacts) -> str:
+def add_contact(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:
         raise AddInputError()
 
     name, phone = args
-    contacts[name] = phone
-    return "Contact added."
+    new_contact = Record(name)
+    new_contact.add_phone(phone)
+    contacts.add_record(new_contact)
+    return f"Contact {name} added."
 
 
 @input_error
-def change_contact(args: CommandArguments, contacts: Contacts) -> str:
+def change_contact(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:
         raise ChangeInputError()
 
     name, phone = args
-    if name in contacts:
-        contacts[name] = phone
-        return f"Phone number for {name} updated."
-    else:
+    contact = contacts.find(name)
+    if not contact:
         return f"No contact named {name} exists."
+
+    contact.edit_phone(contact.phones[0].value, phone)
+    return f"Phone number for {name} updated."
 
 
 @input_error
-def print_phone(args: CommandArguments, contacts: Contacts) -> str:
+def print_phone(args: CommandArguments, contacts: AddressBook) -> str:
     if args[0] is None:
         raise PhoneInputError()
 
     name = args[0]
-    if name in contacts:
-        return f"{name}'s phone number is {contacts[name]}"
-    else:
+    contact = contacts.find(name)
+    if not contact:
         return f"No contact named {name} exists."
 
+    return str(contact)
 
-def print_all(contacts: Contacts) -> str:
+
+def print_all(contacts: AddressBook) -> str:
     if not contacts:
         return "No contacts stored."
     else:
-        return "\n".join([f"{name}: {phone}" for name, phone in contacts.items()])
+        return "\n".join([str(contact) for contact in contacts.data.values()])
