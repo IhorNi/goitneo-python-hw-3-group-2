@@ -13,8 +13,6 @@ from assistant_functions import (
 )
 from errors import HELP_ERROR_MESSAGE
 
-# TODO: save and upload from file
-
 
 def main():
     contacts = load_contacts_book()
