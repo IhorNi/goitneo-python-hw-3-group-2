@@ -1,7 +1,6 @@
 """Prototype of CLI assistant"""
 
 from assistant_functions import (
-    load_contacts_book,
     add_birthday,
     add_contact,
     change_contact,
@@ -9,6 +8,7 @@ from assistant_functions import (
     get_contact_birthday,
     get_contact_phone,
     get_upcoming_birthdays,
+    load_contacts_book,
     parse_input,
 )
 from errors import HELP_ERROR_MESSAGE

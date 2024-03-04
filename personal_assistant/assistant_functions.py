@@ -2,7 +2,8 @@
 
 from typing import Optional
 
-from address_book import AddressBook, Record
+from classes.address_book import AddressBook
+from classes.record import Record
 from errors import (
     AddBirthdatInputError,
     AddContactInputError,
@@ -31,7 +32,7 @@ def parse_input(user_input: str) -> tuple[str, Optional[CommandArguments]]:
 
 def load_contacts_book() -> AddressBook:
     try:
-        contacts = AddressBook.load_from_file('address_book.json')
+        contacts = AddressBook.load_from_file("address_book.json")
     except FileNotFoundError:
         print("File 'address_book.json' not found. Initializing an empty AddressBook.")
         contacts = AddressBook()
