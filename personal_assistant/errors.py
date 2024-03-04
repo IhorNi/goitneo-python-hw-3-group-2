@@ -2,6 +2,7 @@ HELP_ERROR_MESSAGE = """Supported functions:
 - 'add': Add new contact, the correct format is 'add username phone'
 - 'change': Change existing contact, the correct format is 'change username phone'
 - 'phone': Print existing contact number, the correct format is 'phone username'
+- 'show-birthday': Print existing contact birthday, the correct format is 'show-birthday username'
 - 'add-birthday': command expects two arguments 'name' and 'birthday'
 - 'all': Print all existing contact numbers if any, the correct format is 'all'
 - 'exit' | 'close': Close the app, the correct format 'exit' and 'close'
@@ -32,6 +33,11 @@ class ChangeInputError(InputError):
 class PhoneInputError(InputError):
     def __str__(self):
         return "PhoneInputError: 'phone' command expects one argument 'name'."
+
+
+class GetBirthdayInputError(InputError):
+    def __str__(self):
+        return "GetBirthdayInputError: 'show-birthday' command expects one argument username"
 
 
 class InaccurateBirthdayFormat(InputError):

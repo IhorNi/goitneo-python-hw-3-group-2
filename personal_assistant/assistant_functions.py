@@ -4,7 +4,12 @@ from typing import Optional
 
 from address_book import AddressBook, Record
 from errors import (
-    AddContactInputError, ChangeInputError, PhoneInputError, AddBirthdatInputError, input_error
+    AddBirthdatInputError,
+    AddContactInputError,
+    ChangeInputError,
+    GetBirthdayInputError,
+    PhoneInputError,
+    input_error,
 )
 
 Contacts = dict[str, str]
@@ -15,7 +20,7 @@ def parse_input(user_input: str) -> tuple[str, Optional[CommandArguments]]:
     if not user_input.strip():
         return "", None
 
-    cmd, *args = user_input.split(' ')
+    cmd, *args = user_input.split(" ")
     cmd = cmd.strip().lower()
 
     if len(args) == 0:
@@ -37,6 +42,20 @@ def add_contact(args: CommandArguments, contacts: AddressBook) -> str:
 
 
 @input_error
+def add_birthday(args: CommandArguments, contacts: AddressBook) -> str:
+    if args is None or len(args) < 2:
+        raise AddBirthdatInputError()
+
+    name, date = args
+    contact = contacts.find(name)
+    if not contact:
+        return f"No contact named {name} exists."
+
+    contact.add_birthday(date)
+    return f"Birthday added for {name} updated."
+
+
+@input_error
 def change_contact(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:
         raise ChangeInputError()
@@ -51,7 +70,7 @@ def change_contact(args: CommandArguments, contacts: AddressBook) -> str:
 
 
 @input_error
-def print_phone(args: CommandArguments, contacts: AddressBook) -> str:
+def get_contact_phone(args: CommandArguments, contacts: AddressBook) -> str:
     if args[0] is None:
         raise PhoneInputError()
 
@@ -64,20 +83,19 @@ def print_phone(args: CommandArguments, contacts: AddressBook) -> str:
 
 
 @input_error
-def add_birthday(args: CommandArguments, contacts: AddressBook) -> str:
-    if args is None or len(args) < 2:
-        raise AddBirthdatInputError()
+def get_contact_birthday(args: CommandArguments, contacts: AddressBook) -> str:
+    if args[0] is None:
+        raise GetBirthdayInputError()
 
-    name, date = args
+    name = args[0]
     contact = contacts.find(name)
     if not contact:
         return f"No contact named {name} exists."
 
-    contact.add_birthday(date)
-    return f"Birthday added for {name} updated."
+    return contact.birthday
 
 
-def print_all(contacts: AddressBook) -> str:
+def get_all_contacts(contacts: AddressBook) -> str:
     if not contacts:
         return "No contacts stored."
     else:

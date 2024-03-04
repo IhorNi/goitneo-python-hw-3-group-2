@@ -1,7 +1,15 @@
 """Prototype of CLI assistant"""
 
 from address_book import AddressBook
-from assistant_functions import add_contact, change_contact, parse_input, print_all, print_phone, add_birthday
+from assistant_functions import (
+    add_birthday,
+    add_contact,
+    change_contact,
+    get_all_contacts,
+    get_contact_birthday,
+    get_contact_phone,
+    parse_input,
+)
 from errors import HELP_ERROR_MESSAGE
 
 # TODO:
@@ -29,9 +37,11 @@ def main():
         elif command == "change":
             print(change_contact(args, contacts))
         elif command == "phone":
-            print(print_phone(args, contacts))
+            print(get_contact_phone(args, contacts))
+        elif command == "show-birthday":
+            print(get_contact_birthday(args, contacts))
         elif command == "all":
-            print(print_all(contacts))
+            print(get_all_contacts(contacts))
         else:
             print(f"Unknown command '{command}', please try again.\n{HELP_ERROR_MESSAGE}")
 
