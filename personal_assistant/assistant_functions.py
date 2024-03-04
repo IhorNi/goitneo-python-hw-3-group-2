@@ -29,6 +29,15 @@ def parse_input(user_input: str) -> tuple[str, Optional[CommandArguments]]:
     return cmd, *args
 
 
+def load_contacts_book() -> AddressBook:
+    try:
+        contacts = AddressBook.load_from_file('address_book.json')
+    except FileNotFoundError:
+        print("File 'address_book.json' not found. Initializing an empty AddressBook.")
+        contacts = AddressBook()
+    return contacts
+
+
 @input_error
 def add_contact(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:

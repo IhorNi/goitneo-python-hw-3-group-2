@@ -1,7 +1,7 @@
 """Prototype of CLI assistant"""
 
-from address_book import AddressBook
 from assistant_functions import (
+    load_contacts_book,
     add_birthday,
     add_contact,
     change_contact,
@@ -13,20 +13,18 @@ from assistant_functions import (
 )
 from errors import HELP_ERROR_MESSAGE
 
-# TODO:
-# birthdays: Показати дні народження, які відбудуться протягом наступного тижня.
-
 # TODO: save and upload from file
 
 
 def main():
-    contacts = AddressBook()
+    contacts = load_contacts_book()
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
         if command in ["close", "exit"]:
-            print("Good bye!")
+            contacts.save_to_file()
+            print("Contact book is saved, Good bye!")
             break
         if command in ["hello", "hi"]:
             print("How can I help you?")

@@ -1,10 +1,12 @@
+import json
 import re
 from collections import UserDict, defaultdict
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from typing import List, Optional
 
 from errors import InaccurateBirthdayFormat, InaccuratePhoneFormat
 
+ADDRESS_BOOK_FILENAME = "address_book.json"
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Next Monday"]
 MONDAY_INDEX = 0
 NEXT_MONDAY_INDEX = -1
@@ -68,6 +70,22 @@ class Record:
                 return p.value
         return None
 
+    def to_dict(self):
+        return {
+            "name": self.name.value,
+            "phones": [phone.value for phone in self.phones],
+            "birthday": self.birthday.value if self.birthday else None,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        record = cls(data["name"])
+        for phone in data["phones"]:
+            record.add_phone(phone)
+        if data["birthday"]:
+            record.add_birthday(data["birthday"])
+        return record
+
     def __str__(self) -> str:
         return (
             f"Contact name: {self.name}, birthday: {self.birthday}, phones: {'; '.join(p.value for p in self.phones)}"
@@ -75,6 +93,21 @@ class Record:
 
 
 class AddressBook(UserDict):
+    def save_to_file(self, filename: str = ADDRESS_BOOK_FILENAME) -> None:
+        with open(filename, "w") as f:
+            records_list = [record.to_dict() for record in self.data.values()]
+            json.dump(records_list, f)
+
+    @staticmethod
+    def load_from_file(filename: str = ADDRESS_BOOK_FILENAME) -> "AddressBook":
+        with open(filename, "r") as f:
+            records_list = json.load(f)
+        address_book = AddressBook()
+        for record_dict in records_list:
+            record = Record.from_dict(record_dict)
+            address_book.add_record(record)
+        return address_book
+
     def add_record(self, record: Record) -> None:
         self.data[record.name.value] = record
 
@@ -165,48 +198,3 @@ class AddressBook(UserDict):
             return WEEKDAYS[MONDAY_INDEX]
         else:
             return WEEKDAYS[birthday_this_year.weekday()]
-
-
-if __name__ == "__main__":
-    # Створення нової адресної книги
-    book = AddressBook()
-
-    # Створення запису для John
-    john_record = Record("John")
-    john_record.add_phone("1234567890")
-    john_record.add_phone("123456")
-    john_record.add_phone("5555555555")
-
-    # add birthday with wrong format
-    john_record.add_birthday((datetime.today() + timedelta(1)).date().strftime("%Y-%d-%m"))
-    # add birthday with correct format
-    john_record.add_birthday((datetime.today() + timedelta(1)).date().strftime("%d.%m.%Y"))
-
-    # Додавання запису John до адресної книги
-    book.add_record(john_record)
-
-    # Створення та додавання нового запису для Jane
-    jane_record = Record("Jane")
-    jane_record.add_phone("9876543210")
-    jane_record.add_phone("98765432")
-    jane_record.add_birthday((datetime.today() + timedelta(5)).date().strftime("%d.%m.%Y"))
-    book.add_record(jane_record)
-
-    # Виведення всіх записів у книзі
-    for name, record in book.data.items():
-        print(record)
-
-    # Знаходження та редагування телефону для John
-    john = book.find("John")
-    john.edit_phone("1234567890", "1112223333")
-
-    print(john)  # Виведення: Contact name: John, phones: 1112223333; 5555555555
-
-    # Пошук конкретного телефону у записі John
-    found_phone = john.find_phone("5555555555")
-    print(f"{john.name}: {found_phone}")  # Виведення: 5555555555
-
-    print(book.get_birthdays_per_week())
-
-    # Видалення запису Jane
-    book.delete("Jane")
