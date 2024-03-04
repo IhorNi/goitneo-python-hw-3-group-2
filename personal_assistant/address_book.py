@@ -3,7 +3,7 @@ from collections import UserDict, defaultdict
 from datetime import date, datetime, timedelta
 from typing import List, Optional
 
-from errors import InaccurateBirthdayFormat, InaccuratePhoneFormat, input_error
+from errors import InaccurateBirthdayFormat, InaccuratePhoneFormat
 
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Next Monday"]
 MONDAY_INDEX = 0

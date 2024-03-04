@@ -8,12 +8,12 @@ from assistant_functions import (
     get_all_contacts,
     get_contact_birthday,
     get_contact_phone,
+    get_upcoming_birthdays,
     parse_input,
 )
 from errors import HELP_ERROR_MESSAGE
 
 # TODO:
-# show-birthday [ім'я]: Показати дату народження для вказаного контакту.
 # birthdays: Показати дні народження, які відбудуться протягом наступного тижня.
 
 # TODO: save and upload from file
@@ -40,6 +40,8 @@ def main():
             print(get_contact_phone(args, contacts))
         elif command == "show-birthday":
             print(get_contact_birthday(args, contacts))
+        elif command == "birthdays":
+            print(get_upcoming_birthdays(contacts))
         elif command == "all":
             print(get_all_contacts(contacts))
         else:

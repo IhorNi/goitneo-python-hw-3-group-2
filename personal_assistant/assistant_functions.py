@@ -95,6 +95,11 @@ def get_contact_birthday(args: CommandArguments, contacts: AddressBook) -> str:
     return contact.birthday
 
 
+@input_error
+def get_upcoming_birthdays(contacts: AddressBook) -> str:
+    return contacts.get_birthdays_per_week()
+
+
 def get_all_contacts(contacts: AddressBook) -> str:
     if not contacts:
         return "No contacts stored."
