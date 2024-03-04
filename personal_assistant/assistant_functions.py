@@ -9,6 +9,7 @@ from errors import (
     AddContactInputError,
     ChangeInputError,
     GetBirthdayInputError,
+    NonExistingContact,
     PhoneInputError,
     input_error,
 )
@@ -59,7 +60,7 @@ def add_birthday(args: CommandArguments, contacts: AddressBook) -> str:
     name, date = args
     contact = contacts.find(name)
     if not contact:
-        return f"No contact named {name} exists."
+        raise NonExistingContact()
 
     contact.add_birthday(date)
     return f"Birthday added for {name} updated."
@@ -73,7 +74,7 @@ def change_contact(args: CommandArguments, contacts: AddressBook) -> str:
     name, phone = args
     contact = contacts.find(name)
     if not contact:
-        return f"No contact named {name} exists."
+        raise NonExistingContact()
 
     contact.edit_phone(contact.phones[0].value, phone)
     return f"Phone number for {name} updated."
@@ -87,7 +88,7 @@ def get_contact_phone(args: CommandArguments, contacts: AddressBook) -> str:
     name = args[0]
     contact = contacts.find(name)
     if not contact:
-        return f"No contact named {name} exists."
+        raise NonExistingContact()
 
     return str(contact)
 
@@ -100,7 +101,7 @@ def get_contact_birthday(args: CommandArguments, contacts: AddressBook) -> str:
     name = args[0]
     contact = contacts.find(name)
     if not contact:
-        return f"No contact named {name} exists."
+        raise NonExistingContact()
 
     return contact.birthday
 

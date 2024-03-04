@@ -42,12 +42,17 @@ class GetBirthdayInputError(InputError):
 
 class InaccurateBirthdayFormat(InputError):
     def __str__(self):
-        return "Birthday must be in format DD.MM.YYYY."
+        return "InaccurateBirthdayFormat: Birthday must be in format DD.MM.YYYY."
 
 
 class InaccuratePhoneFormat(InputError):
     def __str__(self):
-        return "Phone number must contain exactly 10 digits."
+        return "InaccuratePhoneFormat: Phone number must contain exactly 10 digits."
+
+
+class NonExistingContact(InputError):
+    def __str__(self):
+        return "NonExistingContact: Check contact name, no such contact in address book"
 
 
 def input_error(func):
