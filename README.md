@@ -1,5 +1,9 @@
 ## Examples to test cli assistant
 ```
+python personal_assistant/main.py
+```
+
+```
 add // expected error AddContactInputError
 add Jake // expected error AddContactInputError
 add Jake 1237456 // expected error InaccuratePhoneFormat
