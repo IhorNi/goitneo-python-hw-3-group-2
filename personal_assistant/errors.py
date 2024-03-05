@@ -2,8 +2,9 @@ HELP_ERROR_MESSAGE = """Supported functions:
 - 'add': Add new contact, the correct format is 'add username phone'
 - 'change': Change existing contact, the correct format is 'change username phone'
 - 'phone': Print existing contact number, the correct format is 'phone username'
-- 'show-birthday': Print existing contact birthday, the correct format is 'show-birthday username'
 - 'add-birthday': command expects two arguments 'name' and 'birthday'
+- 'show-birthday': Print existing contact birthday, the correct format is 'show-birthday username'
+- 'birthdays': Print birthdays upcoming next week if any, the correct format is 'birthdays'
 - 'all': Print all existing contact numbers if any, the correct format is 'all'
 - 'exit' | 'close': Close the app, the correct format 'exit' and 'close'
 """
