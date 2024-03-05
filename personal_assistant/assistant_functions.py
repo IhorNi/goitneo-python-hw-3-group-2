@@ -90,7 +90,7 @@ def get_contact_phone(args: CommandArguments, contacts: AddressBook) -> str:
     if not contact:
         raise NonExistingContact()
 
-    return str(contact)
+    return contact.phones[0].value
 
 
 @input_error
