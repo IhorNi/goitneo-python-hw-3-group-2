@@ -45,7 +45,7 @@ def add_contact(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:
         raise AddContactInputError()
 
-    name, phone = args
+    name, phone = args[:2]
     new_contact = Record(name)
     new_contact.add_phone(phone)
     contacts.add_record(new_contact)
@@ -57,7 +57,7 @@ def add_birthday(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:
         raise AddBirthdatInputError()
 
-    name, date = args
+    name, date = args[:2]
     contact = contacts.find(name)
     if not contact:
         raise NonExistingContact()
@@ -71,7 +71,7 @@ def change_contact(args: CommandArguments, contacts: AddressBook) -> str:
     if args is None or len(args) < 2:
         raise ChangeInputError()
 
-    name, phone = args
+    name, phone = args[:2]
     contact = contacts.find(name)
     if not contact:
         raise NonExistingContact()
