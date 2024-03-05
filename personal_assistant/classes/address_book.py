@@ -3,7 +3,7 @@ from collections import UserDict, defaultdict
 from datetime import date, datetime
 from typing import Optional
 
-from classes.record import Record
+from classes.record import DATE_FORMAT, Record
 
 ADDRESS_BOOK_FILENAME = "address_book.json"
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Next Monday"]
@@ -12,6 +12,19 @@ NEXT_MONDAY_INDEX = -1
 
 
 class AddressBook(UserDict):
+    def add_record(self, record: Record) -> None:
+        self.data[record.name.value] = record
+
+    def find(self, name: str) -> Optional[Record]:
+        return self.data.get(name)
+
+    def delete(self, name: str) -> None:
+        if name in self.data:
+            del self.data[name]
+            print(f"{name} record is deleted")
+        else:
+            print(f"No records found by the name {name}")
+
     def save_to_file(self, filename: str = ADDRESS_BOOK_FILENAME) -> None:
         with open(filename, "w") as f:
             records_list = [record.to_dict() for record in self.data.values()]
@@ -26,19 +39,6 @@ class AddressBook(UserDict):
             record = Record.from_dict(record_dict)
             address_book.add_record(record)
         return address_book
-
-    def add_record(self, record: Record) -> None:
-        self.data[record.name.value] = record
-
-    def find(self, name: str) -> Optional[Record]:
-        return self.data.get(name)
-
-    def delete(self, name: str) -> None:
-        if name in self.data:
-            del self.data[name]
-            print(f"{name} record is deleted")
-        else:
-            print(f"No records found by the name {name}")
 
     def get_birthdays_per_week(self, relative_date: date = datetime.today().date()) -> str:
         """
@@ -64,10 +64,10 @@ class AddressBook(UserDict):
             if delta_days < 7:
                 weekday_to_greet = self._get_greeting_day(birthday_this_year, relative_date)
                 next_week_birthday_colleagues[weekday_to_greet].append(
-                    f"{name} ({birthday_this_year.strftime('%Y-%m-%d')})"
+                    f"{name} ({birthday_this_year.strftime(DATE_FORMAT)})"
                 )
 
-        relative_date_str = f"{relative_date.strftime('%Y-%m-%d')}, {WEEKDAYS[relative_date.weekday()]}"
+        relative_date_str = f"{relative_date.strftime(DATE_FORMAT)}, {WEEKDAYS[relative_date.weekday()]}"
 
         greeting_string = f"---\nColleagues to greet for the next week, as of {relative_date_str}:\n---"
         if next_week_birthday_colleagues:

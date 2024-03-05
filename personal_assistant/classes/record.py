@@ -4,6 +4,8 @@ from typing import List, Optional
 
 from errors import InaccurateBirthdayFormat, InaccuratePhoneFormat
 
+DATE_FORMAT = "%d.%m.%Y"
+
 
 class Field:
     def __init__(self, value: str):
@@ -31,7 +33,7 @@ class Birthday(Field):
         super().__init__(value)
 
     def get_birthday_datetime(self) -> date:
-        return datetime.strptime(self.value, "%d.%m.%Y").date()
+        return datetime.strptime(self.value, DATE_FORMAT).date()
 
 
 class Record:
