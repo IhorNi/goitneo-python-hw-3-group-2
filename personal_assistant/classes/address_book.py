@@ -71,8 +71,10 @@ class AddressBook(UserDict):
 
         greeting_string = f"---\nColleagues to greet for the next week, as of {relative_date_str}:\n---"
         if next_week_birthday_colleagues:
-            for day, names in next_week_birthday_colleagues.items():
-                greeting_string += f"\n{day}: {', '.join(names)}"
+            for week_day in WEEKDAYS:
+                week_day_birthdays = next_week_birthday_colleagues.get(week_day)
+                if week_day_birthdays:
+                    greeting_string += f"\n{week_day}: {', '.join(week_day_birthdays)}"
         else:
             greeting_string += "\nNo birthdays this week :("
 
